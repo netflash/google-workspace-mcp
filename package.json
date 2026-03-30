@@ -1,0 +1,145 @@
+{
+  "name": "google-workspace-mcp",
+  "displayName": "Google Workspace MCP",
+  "description": "Gmail, Calendar, Drive, Docs & Sheets tools for every AI agent — Claude, Copilot, Cursor, Codex, Gemini, and more. Zero-config MCP server.",
+  "version": "0.1.1",
+  "publisher": "mercurial",
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#fdf8f0",
+    "theme": "light"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/renzojohnson/google-workspace-mcp"
+  },
+  "homepage": "https://renzojohnson.com/contributions/google-workspace-mcp",
+  "bugs": {
+    "url": "https://github.com/renzojohnson/google-workspace-mcp/issues"
+  },
+  "qna": "https://renzojohnson.com/contact",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "MCP",
+    "Model Context Protocol",
+    "Gmail",
+    "Google Calendar",
+    "Google Drive",
+    "Google Docs",
+    "Google Sheets",
+    "Google Workspace",
+    "AI",
+    "Claude",
+    "Copilot",
+    "Cursor",
+    "Codex",
+    "Gemini"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "extensionKind": [
+    "workspace"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "MCP server starts but registration is limited in untrusted workspaces."
+    }
+  },
+  "contributes": {
+    "mcpServerDefinitionProviders": [
+      {
+        "id": "gws-mcp"
+      }
+    ],
+    "commands": [
+      { "command": "gwsMcp.setupAuth", "title": "Google Workspace MCP: Setup Authentication" },
+      { "command": "gwsMcp.registerAgents", "title": "Google Workspace MCP: Register with AI Agents" },
+      { "command": "gwsMcp.showStatus", "title": "Google Workspace MCP: Show Status" },
+      { "command": "gwsMcp.restartServer", "title": "Google Workspace MCP: Restart MCP Server" },
+      { "command": "gwsMcp.deregisterAll", "title": "Google Workspace MCP: Remove from All Agents" },
+      { "command": "gwsMcp.checkAuth", "title": "Google Workspace MCP: Check Authentication Status" },
+      { "command": "gwsMcp.openLogs", "title": "Google Workspace MCP: View Server Logs" }
+    ],
+    "configuration": {
+      "title": "Google Workspace MCP",
+      "properties": {
+        "gwsMcp.authMethod": {
+          "type": "string",
+          "enum": ["adc", "serviceAccount", "oauth"],
+          "default": "oauth",
+          "enumDescriptions": [
+            "Application Default Credentials (gcloud auth application-default login)",
+            "Service Account JSON key file (requires domain-wide delegation for Gmail)",
+            "OAuth 2.0 browser-based consent (recommended for personal accounts)"
+          ],
+          "description": "Authentication method for Google Workspace APIs"
+        },
+        "gwsMcp.agents.copilot": { "type": "boolean", "default": true, "description": "Register with VS Code Copilot" },
+        "gwsMcp.agents.claudeCode": { "type": "boolean", "default": true, "description": "Register with Claude Code CLI" },
+        "gwsMcp.agents.cursor": { "type": "boolean", "default": true, "description": "Register with Cursor" },
+        "gwsMcp.agents.codex": { "type": "boolean", "default": true, "description": "Register with OpenAI Codex CLI" },
+        "gwsMcp.agents.gemini": { "type": "boolean", "default": true, "description": "Register with Gemini CLI" },
+        "gwsMcp.agents.windsurf": { "type": "boolean", "default": true, "description": "Register with Windsurf" },
+        "gwsMcp.agents.continue": { "type": "boolean", "default": true, "description": "Register with Continue.dev" },
+        "gwsMcp.agents.cline": { "type": "boolean", "default": true, "description": "Register with Cline" },
+        "gwsMcp.registrationScope": {
+          "type": "string",
+          "enum": ["global", "workspace"],
+          "default": "global",
+          "description": "Register globally or per-workspace"
+        },
+        "gwsMcp.serverLogLevel": {
+          "type": "string",
+          "enum": ["error", "warn", "info", "debug"],
+          "default": "info",
+          "description": "Log level for the MCP server"
+        },
+        "gwsMcp.autoStart": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto-start MCP server on VS Code launch"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.config.mjs",
+    "build:prod": "NODE_ENV=production node esbuild.config.mjs",
+    "watch": "node esbuild.config.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "package": "bash scripts/package.sh",
+    "vscode:prepublish": "npm run build:prod"
+  },
+  "dependencies": {
+    "@googleapis/gmail": "^16.1.1",
+    "@googleapis/calendar": "^14.2.0",
+    "@googleapis/drive": "^20.1.0",
+    "@googleapis/docs": "^9.2.1",
+    "@googleapis/sheets": "^13.0.1",
+    "google-auth-library": "^10.6.2",
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "@iarna/toml": "^2.2.5",
+    "jsonc-parser": "^3.3.1",
+    "yaml": "^2.7.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.99.0",
+    "@vscode/vsce": "^3.3.0",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}

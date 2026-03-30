@@ -1,0 +1,7 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 4 ascending rounded bars — transparent background -->
+  <rect x="32" y="156" width="36" height="68" rx="18" fill="#e37400" opacity="0.55"/>
+  <rect x="80" y="116" width="36" height="108" rx="18" fill="#e37400" opacity="0.7"/>
+  <rect x="128" y="72" width="36" height="152" rx="18" fill="#e37400" opacity="0.85"/>
+  <rect x="176" y="28" width="36" height="196" rx="18" fill="#f9ab00"/>
+</svg>
