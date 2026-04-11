@@ -16,6 +16,8 @@ export async function driveList(auth: GoogleAuth, params: {
         pageToken: params.page_token,
         fields: 'nextPageToken, files(id, name, mimeType, size, modifiedTime, parents, webViewLink)',
         orderBy: 'modifiedTime desc',
+        supportsAllDrives: true,
+        includeItemsFromAllDrives: true,
     });
     return { files: res.data.files ?? [], nextPageToken: res.data.nextPageToken };
 }
@@ -27,6 +29,9 @@ export async function driveSearch(auth: GoogleAuth, query: string, max_results?:
         pageSize: max_results ?? 25,
         fields: 'files(id, name, mimeType, size, modifiedTime, parents, webViewLink)',
         orderBy: 'modifiedTime desc',
+        supportsAllDrives: true,
+        includeItemsFromAllDrives: true,
+        corpora: 'allDrives',
     });
     return { files: res.data.files ?? [] };
 }

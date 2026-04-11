@@ -30,6 +30,7 @@ export async function driveAdminDispatch(
     switch (action) {
         case 'create_folder': {
             const res = await driveClient.files.create({
+                supportsAllDrives: true,
                 requestBody: {
                     name: params.name as string,
                     mimeType: 'application/vnd.google-apps.folder',
@@ -41,10 +42,11 @@ export async function driveAdminDispatch(
         }
 
         case 'move': {
-            const file = await driveClient.files.get({ fileId: params.file_id as string, fields: 'parents' });
+            const file = await driveClient.files.get({ fileId: params.file_id as string, supportsAllDrives: true, fields: 'parents' });
             const previousParents = (file.data.parents ?? []).join(',');
             const res = await driveClient.files.update({
                 fileId: params.file_id as string,
+                supportsAllDrives: true,
                 addParents: params.destination_folder_id as string,
                 removeParents: previousParents,
                 fields: 'id, name, parents',
@@ -55,6 +57,7 @@ export async function driveAdminDispatch(
         case 'copy': {
             const res = await driveClient.files.copy({
                 fileId: params.file_id as string,
+                supportsAllDrives: true,
                 requestBody: {
                     name: params.new_name as string | undefined,
                     parents: params.destination_folder_id ? [params.destination_folder_id as string] : undefined,
@@ -67,6 +70,7 @@ export async function driveAdminDispatch(
         case 'rename': {
             const res = await driveClient.files.update({
                 fileId: params.file_id as string,
+                supportsAllDrives: true,
                 requestBody: { name: params.new_name as string },
                 fields: 'id, name',
             });
@@ -74,13 +78,14 @@ export async function driveAdminDispatch(
         }
 
         case 'delete': {
-            await driveClient.files.delete({ fileId: params.file_id as string });
+            await driveClient.files.delete({ fileId: params.file_id as string, supportsAllDrives: true });
             return { deleted: true, file_id: params.file_id };
         }
 
         case 'share': {
             const res = await driveClient.permissions.create({
                 fileId: params.file_id as string,
+                supportsAllDrives: true,
                 requestBody: {
                     type: (params.type as string) ?? 'user',
                     role: (params.role as string) ?? 'reader',
@@ -94,6 +99,7 @@ export async function driveAdminDispatch(
         case 'unshare': {
             await driveClient.permissions.delete({
                 fileId: params.file_id as string,
+                supportsAllDrives: true,
                 permissionId: params.permission_id as string,
             });
             return { removed: true, permission_id: params.permission_id };
@@ -102,6 +108,7 @@ export async function driveAdminDispatch(
         case 'get_permissions': {
             const res = await driveClient.permissions.list({
                 fileId: params.file_id as string,
+                supportsAllDrives: true,
                 fields: 'permissions(id, type, role, emailAddress, displayName)',
             });
             return res.data.permissions ?? [];
